@@ -1,0 +1,50 @@
+{
+  "$schema": "dab.draft-01.schema.json",
+  "data-source": {
+    "database-type": "cosmosdb_nosql",
+    "options": {
+      "database": "HawaiiGraphQL",
+      "container": "schema.gql",
+      "schema": "staticwebapp.database.schema2.gql"
+    },
+    "connection-string": "AccountEndpoint=https://hawaii-testing-cosmos.documents.azure.com:443/;AccountKey=Fdjz65CrsSmsXBNpDfwhSz91dWhLHa4JZyZVz6i1UJ3F0MTfrsp6Jf0GJHvHK2vwyuAcLraQWTXEerk9RDDeyQ==;"
+  },
+  "runtime": {
+    "rest": {
+      "path": "/api"
+    },
+    "graphql": {
+      "path": "/graphql"
+    },
+    "host": {
+      "mode": "development",
+      "cors": {
+        "origins": ["http://localhost:4280"],
+        "allow-credentials": true
+      },
+      "authentication": {
+        "provider": "StaticWebApps"
+      }
+    }
+  },
+  "entities": {
+    "Author": {
+      "source": "HawaiiGraphQL.authors",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "Book": {
+      "source": "HawaiiGraphQL.books",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    }
+  }
+}

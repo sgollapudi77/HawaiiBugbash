@@ -1,0 +1,190 @@
+<!--
+ *  Copyright (c) 2021 GraphQL Contributors
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the license found in the
+ *  LICENSE file in the root directory of this source tree.
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font: 400 16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        margin: auto;
+        margin: 1em;
+        max-width: 1200px;
+      }
+
+      #graphiql {
+        height: 70vh;
+      }
+
+      body {
+        font-family: sans-serif;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      form {
+        display: flex;
+        flex-direction: row;
+      }
+
+      label {
+        margin-top: 1em;
+      }
+
+      .input,
+      .select,
+      .textarea {
+        width: 25em;
+        height: 3em;
+        border-radius: 0.25em;
+        border: 1px solid #ccc;
+      }
+
+      .textarea {
+        height: 10em;
+      }
+
+      .submit {
+        width: 10em;
+        height: 2.5em;
+        background-color: #00b4f4;
+        color: white;
+        font-weight: bold;
+        border-radius: 0.25em;
+        border: none;
+        margin-left: 1em;
+      }
+    </style>
+
+    <!--
+      This GraphiQL example depends on Promise and fetch, which are available in
+      modern browsers, but can be "polyfilled" for older browsers.
+      GraphiQL itself depends on React DOM.
+      If you do not want to rely on a CDN, you can host these files locally or
+      include them directly in your favored resource bundler.
+    -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@17/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    ></script>
+
+    <!--
+      These two files can be found in the npm module, however you may wish to
+      copy them directly into your environment, or perhaps include them in your
+      favored resource bundler.
+     -->
+    <link rel="stylesheet" href="https://unpkg.com/graphiql/graphiql.min.css" />
+  </head>
+
+  <body>
+    <h1>SWA Database Connections demo</h1>
+    <p>This is a simple HTML page to make requests to the provisioned /data-api endpoint as part of the database connections
+      feature for Static Web Apps. The database connections feature is powered by <a href="https://github.com/Azure/data-api-builder">Data API Builder</a>.
+    </p>
+    <h2>GraphQL</h2>
+    <p>GraphQL requests are made to the /data-api/graphql endpoint. 
+      The graphql part of the path can be customized in the configuration JSON file.
+      The below GraphiQL interface is provided to facilitate querying and browsing the GraphQL schema.</p>
+    <div id="graphiql">Loading...</div>
+    <h2>REST</h2>
+    <p>REST requests can also be made, with the following features provided (GET (get items), 
+      POST (create a new item), PUT (create or replace an item), 
+      PATCH (update an item), DELETE (delete an item))
+    </p>
+    <p>The below interface is provided to facilitate the creation of REST queries and displays the result. 
+      Alternatively, you can do these manually in your browser dev tools.
+    </p>
+    <title>HTTP REST Request</title>
+    <h3>HTTP REST Request</h3>
+    <form>
+      <div>
+        <div>
+          <label for="method">Method:</label>
+          <select id="method" class="select">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+          <label for="url">URL:</label>
+          <input type="text" id="url" class="input" placeholder="/data-api/api/Author" />
+          <input type="submit" value="Submit" class="submit" />
+
+        </div>
+        <div style="display: flex; margin-top: 0.2em;">
+          <label for="body">Body:</label>
+          <textarea id="body" class="textarea"></textarea>
+          <label for="response">Response:</label>
+          <br />
+          <textarea id="response" class="textarea" disabled></textarea>
+        </div>
+
+      </div>
+
+    </form>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <script>
+      const form = document.querySelector('form');
+      const urlInput = document.querySelector('#url');
+      const methodInput = document.querySelector('#method');
+      const bodyInput = document.querySelector('#body');
+      const responseBox = document.querySelector('#response');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const url = urlInput.value;
+        const method = methodInput.value;
+        const body = bodyInput.value;
+
+
+        try {
+          const response = await fetch(url, { method,
+            body: body ? JSON.stringify(body) : undefined,
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+          const json = await response.json();
+          responseBox.value = JSON.stringify(json);
+        } catch (error) {
+          responseBox.value = "Error occured. Check the console for details."
+          console.log(error)
+        }
+      });
+    </script>
+    <script
+      src="https://unpkg.com/graphiql/graphiql.min.js"
+      type="application/javascript"
+    ></script>
+    <script>
+      ReactDOM.render(
+        React.createElement(GraphiQL, {
+          fetcher: GraphiQL.createFetcher({
+            url: "/data-api/graphql",
+          }),
+          defaultEditorToolsVisibility: true,
+        }),
+        document.getElementById('graphiql'),
+      );
+    </script>
+  </body>
+</html>

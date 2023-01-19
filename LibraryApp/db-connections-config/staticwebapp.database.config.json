@@ -1,0 +1,56 @@
+{
+    "$schema": "dab.draft-01.schema.json",
+    "data-source": {
+      "database-type": "mssql",
+      "connection-string": "Server=tcp:swa-testing.database.windows.net,1433;Initial Catalog=swaHawaiiTesting;Persist Security Info=False;User ID=swa-testing;Password=Vamsi@77;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    },
+    "runtime": {
+      "rest": {
+        "path": "/api"
+      },
+      "graphql": {
+        "path": "/graphql"
+      },
+      "host": {
+        "mode": "development",
+        "cors": {
+          "origins": ["http://localhost:4280"],
+          "allow-credentials": true
+        },
+        "authentication": {
+          "provider": "StaticWebApps"
+        }
+      }
+    },
+    "entities": {
+      "Author": {
+        "source": "dbo.authors",
+        "permissions": [
+          {
+            "actions": ["*"],
+            "role": "admin"
+          },
+          {
+            "actions": ["read"],
+            "role": "anonymous"
+          }
+        ],
+        "relationships": {
+          "books": {
+            "cardinality": "many",
+            "target.entity": "Book"
+          }
+        }
+      },
+      "Book": {
+        "source": "dbo.books",
+        "permissions": [
+          
+          {
+            "actions": ["*"],
+            "role": "anonymous"
+          }
+        ]
+      }
+    }
+  }

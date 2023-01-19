@@ -7,7 +7,7 @@
       "container": "schema.gql",
       "schema": "staticwebapp.database.schema2.gql"
     },
-    "connection-string": "AccountEndpoint=https://hawaii-testing-cosmos.documents.azure.com:443/;AccountKey=Fdjz65CrsSmsXBNpDfwhSz91dWhLHa4JZyZVz6i1UJ3F0MTfrsp6Jf0GJHvHK2vwyuAcLraQWTXEerk9RDDeyQ==;"
+    "connection-string": ""
   },
   "runtime": {
     "rest": {
